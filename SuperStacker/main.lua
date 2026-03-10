@@ -1,22 +1,30 @@
 local g3d = require("g3d")
-local earth = g3d.newModel("assets/models/cone.obj", "assets/textures/trafficcone.png", {0, 0, 0}, {math.pi / 2, 0, 0})
-local base = g3d.newModel("assets/models/base.obj", "assets/textures/base.png", {0, 0, -2}, {math.pi / 2, 0, 0})
+local scenes = require("src.scenes")
+require("debugger")
 
-function love.load()
-    love.window.setTitle("Super Stacker 3D")
-    love.window.setIcon(love.image.newImageData("assets/icon.png"))
+function lerp(a, b, c)
+    return a + (b - a) * c
 end
 
-function love.mousemoved(x,y, dx,dy)
-    g3d.camera.firstPersonLook(dx,dy)
+function love.load()
+    love.math.setRandomSeed(os.time())
+    scenes:load()
+end
+
+function love.resize(w, h)
+    g3d.camera.aspectRatio = w / h
+    g3d.camera.updateProjectionMatrix()
+end
+
+function love.keypressed(key)
+    scenes:call("keypressed", key)
 end
 
 function love.update(dt)
-    g3d.camera.firstPersonMovement(dt)
+    scenes:call("update", dt)
 end
 
 function love.draw()
+    scenes:call("draw")
     love.graphics.setBackgroundColor(0.8, 0.8, 0.8)
-    earth:draw()
-    base:draw()
 end
