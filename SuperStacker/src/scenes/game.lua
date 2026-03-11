@@ -1,4 +1,5 @@
 local g3d = require("g3d")
+local gui = require("src.gui")
 local world = require("src.game.world")
 local keybinds = require("src.keybinds")
 local resources = require("src.resources")
@@ -59,64 +60,70 @@ function game:update(dt)
     end
 end
 
+function game:drawkeybinds(world, i)
+    if keybinds[#self.worlds] then
+        local key = keybinds[#self.worlds][i][1]
+        if key then
+            local sprite = resources.sprites.keys[key]
+            if sprite then
+                gui:drawsprite(sprite, 0, 30, 3, 3, "center", "bottom")
+            end
+        end
+    end
+end
+
+function game:drawduels()
+    -- SPLITSCREEN
+    local sw, sh = love.graphics.getDimensions()
+
+    for i, world in pairs(self.worlds) do
+        -- update world before drawing to prevent weird bugs with the g3d camera
+        world:update(love.timer.getDelta())
+        -- draw the canvas
+        local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
+        local canvas = self.canvases[i]
+
+        love.graphics.setCanvas({canvas, depth = true})
+            love.graphics.clear()
+            love.resize(w, h)
+            world:draw()
+        
+        if not world.gameover then
+            self:drawkeybinds(world, i)
+        end
+        
+        love.graphics.setCanvas()
+        love.graphics.draw(canvas, x, y)
+    end
+
+    -- draw lines
+    love.graphics.setColor(0, 0, 0)
+    if #self.worlds <= 3 then
+        for i = 1, #self.worlds - 1 do
+            local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
+            love.graphics.line(x + w, y, x + w, y + h)
+        end
+    else
+        love.graphics.line(0, sh / 2, sw, sh / 2)
+        for i = 1, (#self.worlds / 2) - 1 do
+            local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
+            love.graphics.line(x + w, y, x + w, y + h)
+        end
+        for i = (#self.worlds / 2) + 1, #self.worlds - 1 do
+            local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
+            love.graphics.line(x + w, y, x + w, y + h)
+        end
+    end
+    love.graphics.setColor(1, 1, 1)
+
+    love.graphics.setCanvas()
+end
+
 function game:draw()
     if #self.worlds == 1 then
         self.worlds[1]:draw()
     else
-        local sw, sh = love.graphics.getDimensions()
-
-        for i, world in pairs(self.worlds) do
-            world:update(love.timer.getDelta())
-
-            local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
-            local canvas = self.canvases[i]
-            -- draw splitscreen world
-            love.graphics.setCanvas({canvas, depth = true})
-                love.graphics.clear()
-                love.resize(w, h)
-                world:draw()
-
-            if not world.gameover then
-                 -- draw keybind
-                love.graphics.setColor(0, 0, 0)
-                if keybinds[#self.worlds] then
-                    local key = keybinds[#self.worlds][i][1]
-                    if key then
-                        local sprite = resources.sprites.keys[key]
-                        if sprite then
-                            local x, y, ox, oy = w/2, h-40, sprite:getWidth() / 2, sprite:getHeight() / 2
-                            love.graphics.draw(sprite, x, y, 0, 1, 1, ox, oy)
-                        end
-                    end
-                end
-                love.graphics.setColor(1, 1, 1)
-            end
-            
-            love.graphics.setCanvas()
-            love.graphics.draw(canvas, x, y)
-        end
-
-        -- draw lines
-        love.graphics.setColor(0, 0, 0)
-        if #self.worlds <= 3 then
-            for i = 1, #self.worlds - 1 do
-                local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
-                love.graphics.line(x + w, y, x + w, y + h)
-            end
-        else
-            love.graphics.line(0, sh / 2, sw, sh / 2)
-            for i = 1, (#self.worlds / 2) - 1 do
-                local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
-                love.graphics.line(x + w, y, x + w, y + h)
-            end
-            for i = (#self.worlds / 2) + 1, #self.worlds - 1 do
-                local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
-                love.graphics.line(x + w, y, x + w, y + h)
-            end
-        end
-        love.graphics.setColor(1, 1, 1)
-    
-        love.graphics.setCanvas()
+        self:drawduels()
     end
 end
 

@@ -1,4 +1,3 @@
-local resources = require("src.resources")
 local constants = require("src.constants")
 
 local placer = {}
@@ -9,10 +8,12 @@ function placer.new(world)
     setmetatable(self, placer)
 
     self.cone = nil
+    self.falling = false
 
     self.world = world
     self.direction = -1
-    self.speed = 0.25
+    self.speed = 1
+    self.fallspeed = 0
     self.x = 0
     self.y = 0
 
@@ -20,29 +21,32 @@ function placer.new(world)
 end
 
 function placer:setcone(cone)
-    if cone then
-        self.cone = cone
-    end
+    self.cone = cone
 end
 
 function placer:update(dt)
     if self.cone then
-        -- moving left and right
-        self.x = self.x + ((self.direction * (self.speed * 15)) * dt)
-        if self.direction < 0 then
-            if self.x < -constants.placerX then
-                self.direction = 1
-            end
+        if self.falling then
+            self.fallspeed = self.fallspeed + (dt * 9.81)
+            self.y = self.y - (dt * self.fallspeed)
         else
-            if self.x > constants.placerX then
-                self.direction = -1
+            -- moving left and right
+            self.x = self.x + ((self.direction * (self.speed * 3.75)) * dt)
+            if self.direction < 0 then
+                if self.x < -constants.placerX then
+                    self.direction = 1
+                end
+            else
+                if self.x > constants.placerX then
+                    self.direction = -1
+                end
+            end
+            -- get height
+            if self.world.stack then
+                self.y = (self.world.stack.length * constants.coneoffset) + constants.placerY
             end
         end
-        -- get height
-        if self.world.stack then
-            self.y = (self.world.stack.length * constants.coneoffset) + constants.placerY
-        end
-        -- move cone
+        -- move cone=
         self.cone:setTranslation(self.x, 0, self.y)
     end
 end

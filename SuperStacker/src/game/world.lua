@@ -1,4 +1,5 @@
 local g3d = require("g3d")
+local gui = require("src.gui")
 local resources = require("src.resources")
 local stack = require("src.game.stack")
 local placer = require("src.game.placer")
@@ -33,8 +34,11 @@ function world.new(mode, override)
 end
 
 function world:lose()
-    love.audio.play(resources.sounds.conefall)
     self.gameover = true
+
+    if self.mode.lose then
+        self.mode:lose()
+    end
 end
 
 function world:createcone(color)
@@ -51,27 +55,15 @@ function world:dropcone()
 end
 
 function world:draw()
-    if not self.gameover then
-        if not self.mode.custombehavior then
-            self.stack:draw()
-            self.placer:draw()
-            self.mode:draw()
-        end
-    else
-        -- draw game over screen
-        love.graphics.setColor(0, 0, 0)
+    if not self.mode.custombehavior then
+        self.stack:draw()
+        self.placer:draw()
+        self.mode:draw()
+    end
 
-        local sw, sh = love.graphics.getDimensions()
-        if love.graphics.getCanvas() then
-            sw, sh = love.graphics.getCanvas():getDimensions()
-        end
-        
-        love.graphics.setFont(resources.fonts.regular40px)
-        love.graphics.printf("Game Over!", 0, sh/2 - 60, sw, "center")
-        love.graphics.setFont(resources.fonts.regular20px)
-        love.graphics.printf("Score: " .. self.score, 0, sh/2, sw, "center")
-
-        love.graphics.setColor(1, 1, 1)
+    if self.gameover then -- draw game over screen
+        gui:drawtext("Game Over!", 0, 0, resources.fonts.regular40px, "center", "center")
+        gui:drawtext("Score " .. self.score, 0, 30, resources.fonts.regular20px, "center", "center")
     end
 end
 

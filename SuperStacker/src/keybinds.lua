@@ -1,9 +1,11 @@
+-- these map the multiplayer keys
+-- the first key is the number of players, the second key is the player number, and the value is a table of keys that player can use
 return {
     [1] = {
         [1] = {"up", "w", "space"}
     },
     [2] = {
-        [1] = {"shift"};
+        [1] = {"lshift"};
         [2] = {"return"};
     },
     [3] = {

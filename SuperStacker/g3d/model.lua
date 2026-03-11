@@ -104,6 +104,10 @@ function model:setRotation(rx,ry,rz)
     self:updateMatrix()
 end
 
+function model:getTranslation()
+    return self.translation[1], self.translation[2], self.translation[3]
+end
+
 -- create a quaternion from an axis and an angle
 function model:setAxisAngleRotation(x,y,z,angle)
     x,y,z = vectorNormalize(x,y,z)
@@ -149,9 +153,6 @@ end
 function model:lookAt(target, up)
     self.matrix:lookAtFrom(self.translation, target, up or {0,0,1}, self.scale)
 end
-
-
-
 
 -- draw the model
 function model:draw(shader)
