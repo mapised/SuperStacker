@@ -1,5 +1,3 @@
-local g3d = require("g3d")
-local resources = require("src.resources")
 local world = require("src.game.world")
 local menu = {}
 
@@ -17,7 +15,7 @@ end
 
 function menu:keypressed(key)
     if key == "return" then
-        require("src.scenes"):switch("game", "classic", 3)
+        require("src.scenes"):switch("game", "classic", 12)
     end
 end
 

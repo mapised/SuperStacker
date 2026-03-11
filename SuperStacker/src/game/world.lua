@@ -24,6 +24,8 @@ function world.new(mode, override)
             self.stack:addcone()
         end
         
+        self.gameover = false
+        self.score = 0
         self.mode = gamemodes[mode].new(self)
 
         return self
@@ -32,7 +34,7 @@ end
 
 function world:lose()
     love.audio.play(resources.sounds.conefall)
-    require("src.scenes"):switch("menu")
+    self.gameover = true
 end
 
 function world:createcone(color)
@@ -43,17 +45,33 @@ function world:createcone(color)
 end
 
 function world:dropcone()
-    self.mode:dropcone()
+    if not self.gameover then
+        self.mode:dropcone()
+    end
 end
 
 function world:draw()
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.print(self.stack.length, 30, 30, 0, 2, 2)
-    love.graphics.setColor(1, 1, 1)
-    self.mode:draw()
-    if not self.mode.custombehavior then
-        self.stack:draw()
-        self.placer:draw()
+    if not self.gameover then
+        if not self.mode.custombehavior then
+            self.stack:draw()
+            self.placer:draw()
+            self.mode:draw()
+        end
+    else
+        -- draw game over screen
+        love.graphics.setColor(0, 0, 0)
+
+        local sw, sh = love.graphics.getDimensions()
+        if love.graphics.getCanvas() then
+            sw, sh = love.graphics.getCanvas():getDimensions()
+        end
+        
+        love.graphics.setFont(resources.fonts.regular40px)
+        love.graphics.printf("Game Over!", 0, sh/2 - 60, sw, "center")
+        love.graphics.setFont(resources.fonts.regular20px)
+        love.graphics.printf("Score: " .. self.score, 0, sh/2, sw, "center")
+
+        love.graphics.setColor(1, 1, 1)
     end
 end
 

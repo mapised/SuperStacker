@@ -1,5 +1,6 @@
 -- SPECIAL STATE: only used for the menu, cones dont drop, camera spins
 local g3d = require("g3d")
+local resources = require("src.resources")
 
 local static = {}
 static.custombehavior = false
@@ -30,7 +31,18 @@ function static:update(dt)
 end
 
 function static:draw()
+    love.graphics.setFont(resources.fonts.regular60px)
+    love.graphics.setColor(0, 0, 0)
 
+    local sw, sh = love.graphics.getDimensions()
+
+    love.graphics.printf("Super Stacker 3D", 0, sh / 2 - 30, sw, "center")
+
+    love.graphics.setFont(resources.fonts.regular20px)
+    love.graphics.print("A Cone Stacker fangame by Aiden", 5, sh - 70, 0, 1, 1)
+    love.graphics.print("Cone Stacker is made by Gavin", 5, sh - 45, 0, 1, 1)
+    
+    love.graphics.setColor(1, 1, 1)
 end
 
 return static

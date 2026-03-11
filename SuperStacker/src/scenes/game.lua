@@ -1,7 +1,10 @@
 local g3d = require("g3d")
 local world = require("src.game.world")
+local keybinds = require("src.keybinds")
+local resources = require("src.resources")
 
 local game = {
+    resettimer = 3;
     canvases = {};
     worlds = {};
 }
@@ -33,8 +36,26 @@ function game:enter(oldScene, mode, players)
 end
 
 function game:update(dt)
-    for _, world in pairs(self.worlds) do
-        world:update(dt)
+    if self.resettimer > 0 then
+        self.resettimer = self.resettimer - 1
+    end
+
+    -- check win condition / update for singleplayer
+    if #self.worlds == 1 then
+        self.worlds[1]:update(dt)
+        if self.worlds[1].gameover and self.resettimer <= 0 then
+            require("src.scenes"):switch("menu")
+        end
+    else
+        local canreset = true
+        for _, world in pairs(self.worlds) do
+            if not world.gameover then
+                canreset = false
+            end
+        end
+        if canreset then
+            require("src.scenes"):switch("menu")
+        end
     end
 end
 
@@ -45,6 +66,8 @@ function game:draw()
         local sw, sh = love.graphics.getDimensions()
 
         for i, world in pairs(self.worlds) do
+            world:update(love.timer.getDelta())
+
             local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
             local canvas = self.canvases[i]
             -- draw splitscreen world
@@ -52,6 +75,23 @@ function game:draw()
                 love.graphics.clear()
                 love.resize(w, h)
                 world:draw()
+
+            if not world.gameover then
+                 -- draw keybind
+                love.graphics.setColor(0, 0, 0)
+                if keybinds[#self.worlds] then
+                    local key = keybinds[#self.worlds][i][1]
+                    if key then
+                        local sprite = resources.sprites.keys[key]
+                        if sprite then
+                            local x, y, ox, oy = w/2, h-40, sprite:getWidth() / 2, sprite:getHeight() / 2
+                            love.graphics.draw(sprite, x, y, 0, 1, 1, ox, oy)
+                        end
+                    end
+                end
+                love.graphics.setColor(1, 1, 1)
+            end
+            
             love.graphics.setCanvas()
             love.graphics.draw(canvas, x, y)
         end
@@ -81,19 +121,13 @@ function game:draw()
 end
 
 function game:keypressed(key)
-    if #self.worlds > 1 then
-         -- multiple inputs
-        if key == "lshift" then
-            self.worlds[1]:dropcone()
-        elseif key == "space" then
-            self.worlds[2]:dropcone()
-        elseif key == "return" then
-            self.worlds[3]:dropcone()
-        end
-    else
-         -- solo inputs
-        if key == "space" or key == "return" or key == "w" or key == "up" then
-            self.worlds[1]:dropcone()
+    if keybinds[#self.worlds] then
+        for i, keys in pairs(keybinds[#self.worlds]) do
+            for _, keybind in pairs(keys) do
+                if key == keybind then
+                    self.worlds[i]:dropcone()
+                end
+            end
         end
     end
 end

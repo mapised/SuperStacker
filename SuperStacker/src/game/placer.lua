@@ -12,7 +12,7 @@ function placer.new(world)
 
     self.world = world
     self.direction = -1
-    self.speed = 4
+    self.speed = 0.25
     self.x = 0
     self.y = 0
 
@@ -28,7 +28,7 @@ end
 function placer:update(dt)
     if self.cone then
         -- moving left and right
-        self.x = self.x + ((self.direction * self.speed) * dt)
+        self.x = self.x + ((self.direction * (self.speed * 15)) * dt)
         if self.direction < 0 then
             if self.x < -constants.placerX then
                 self.direction = 1
@@ -48,7 +48,7 @@ function placer:update(dt)
 end
 
 function placer:getaccuracy()
-    return (1 - math.abs(self.x)) * 100
+    return (1 - (math.abs(self.x) / constants.placerX)) * 100
 end
 
 function placer:draw()
