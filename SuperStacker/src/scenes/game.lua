@@ -142,6 +142,7 @@ end
 function game:exit()
     -- do this to prevent weird g3d camera bugs when switching back to menu
     love.resize(love.graphics.getDimensions())
+    self.canvases = {}
     self.worlds = {}
 end
 

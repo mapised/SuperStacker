@@ -15,7 +15,7 @@ end
 
 function menu:keypressed(key)
     if key == "return" then
-        require("src.scenes"):switch("game", "classic", 12)
+        require("src.scenes"):switch("game", "arcade", 12)
     end
 end
 

@@ -35,17 +35,20 @@ function classic:playconesound()
     love.audio.play(resources.sounds.conedrop)
 end
 
+function classic:addcone()
+    self.world.score = self.world.score + 1
+    self.world.stack:addcone(self.world.placer.cone)
+    self.world.placer:setcone(self.world:createcone())
+    self.world.placer.x = 0
+end
+
 function classic:dropcone()
     if self.world.placer.cone then
         local accuracy = self.world.placer:getaccuracy()
 
         if accuracy >= 50 then
             -- place cone
-            self.world.score = self.world.score + 1
-            self.world.stack:addcone(self.world.placer.cone)
-            self.world.placer:setcone(self.world:createcone())
-            self.world.placer.x = 0
-
+            self:addcone()
             self:playconesound()
             self:increasespeed()
         else

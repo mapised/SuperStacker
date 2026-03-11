@@ -20,7 +20,7 @@ function love.resize(w, h)
     g3d.camera.aspectRatio = w / h
     g3d.camera.updateProjectionMatrix()
 
-    gui:setscale(math.max((math.floor((math.min(w, h) / 700) * 4) / 4), 0.5))
+    gui:setscale(math.max((math.floor((math.min(w, h) / 700) * 4) / 4), 0.25))
 end
 
 function love.keypressed(key)

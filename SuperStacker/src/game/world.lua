@@ -7,6 +7,7 @@ local placer = require("src.game.placer")
 local gamemodes = {
     static = require("src.game.modes.static");
     classic = require("src.game.modes.classic");
+    arcade = require("src.game.modes.arcade");
 }
 
 local world = {}
