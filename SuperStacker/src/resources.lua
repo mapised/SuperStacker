@@ -2,6 +2,8 @@ return {
     sounds = {
         conedrop = love.audio.newSource("assets/sounds/conedrop.ogg", "static");
         conefall = love.audio.newSource("assets/sounds/conefall.ogg", "static");
+        gold = love.audio.newSource("assets/sounds/gold.wav", "static");
+        red = love.audio.newSource("assets/sounds/red.wav", "static");
     },
     fonts = {
         regular20px = love.graphics.newFont("assets/fonts/Acme 9 Regular.ttf", 20);
@@ -38,10 +40,16 @@ return {
     },
     models = {
         cone = "assets/models/cone.obj";
+        redcone = "assets/models/redcone.obj";
         base = "assets/models/base.obj";
     },
     textures = {
         trafficcone = "assets/textures/trafficcone.png";
+        redcone = "assets/textures/redcone.png";
+        yellowcone = "assets/textures/yellowcone.png";
+        orangecone = "assets/textures/orangecone.png";
+        goldcone = "assets/textures/goldcone.png";
+        bluecone = "assets/textures/bluecone.png";
         base = "assets/textures/base.png";
     },
 }

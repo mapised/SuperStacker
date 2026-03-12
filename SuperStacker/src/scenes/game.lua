@@ -1,4 +1,3 @@
-local g3d = require("g3d")
 local gui = require("src.gui")
 local world = require("src.game.world")
 local keybinds = require("src.keybinds")
@@ -66,7 +65,11 @@ function game:drawkeybinds(world, i)
         if key then
             local sprite = resources.sprites.keys[key]
             if sprite then
-                gui:drawsprite(sprite, 0, 30, 3, 3, "center", "bottom")
+                local y = 30
+                if love.keyboard.isDown(key) then
+                    y = y - 4
+                end
+                gui:drawsprite(sprite, 0, y, 3, 3, "center", "bottom")
             end
         end
     end
@@ -132,7 +135,7 @@ function game:keypressed(key)
         for i, keys in pairs(keybinds[#self.worlds]) do
             for _, keybind in pairs(keys) do
                 if key == keybind then
-                    self.worlds[i]:dropcone()
+                    self.worlds[i]:input()
                 end
             end
         end

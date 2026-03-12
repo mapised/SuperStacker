@@ -29,6 +29,13 @@ function stack:addcone(cone)
     self.cones[self.length] = cone
 end
 
+function stack:removecone()
+    if self.length > 1 then
+        self.cones[self.length] = nil
+        self.length = self.length - 1
+    end
+end
+
 function stack:draw()
     -- draw the bottom
     self.base:draw()

@@ -20,8 +20,11 @@ end
 
 function gui:drawtext(text, x, y, font, xallignment, yallignment, color)
     love.graphics.setFont(font)
-    love.graphics.setColor(color and unpack(color) or 0, 0, 0)
-
+    if color then
+        love.graphics.setColor(unpack(color))
+    else
+        love.graphics.setColor(0, 0, 0, 1)
+    end
     local sw, sh = getdimensions()
     local fh = font:getHeight(text)
     local oy = 0

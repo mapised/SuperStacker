@@ -21,18 +21,11 @@ end
 
 function classic:increasespeed()
     -- increase speed a little bit
-    if self.world.placer.speed < 3 then
-        self.world.placer.speed = self.world.placer.speed + 0.2
+    if self.world.placer.speed < 2 then
+        self.world.placer.speed = self.world.placer.speed + 0.1
     else
-        self.world.placer.speed = math.min(self.world.placer.speed + 0.1, 5)
+        self.world.placer.speed = math.min(self.world.placer.speed + 0.05, 4)
     end
-end
-
-function classic:playconesound()
-    resources.sounds.conedrop:setPitch(1 + ((math.random() - 0.5) * 0.2))
-
-    love.audio.stop(resources.sounds.conedrop)
-    love.audio.play(resources.sounds.conedrop)
 end
 
 function classic:addcone()
@@ -42,15 +35,15 @@ function classic:addcone()
     self.world.placer.x = 0
 end
 
-function classic:dropcone()
+function classic:input()
     if self.world.placer.cone then
         local accuracy = self.world.placer:getaccuracy()
 
         if accuracy >= 50 then
             -- place cone
             self:addcone()
-            self:playconesound()
             self:increasespeed()
+            self.world:playconesound()
         else
             self.world:lose()
         end

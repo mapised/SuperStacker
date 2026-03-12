@@ -9,11 +9,10 @@ function placer.new(world)
 
     self.cone = nil
     self.falling = false
-
+    self.fallspeed = 0
     self.world = world
     self.direction = -1
     self.speed = 1
-    self.fallspeed = 0
     self.x = 0
     self.y = 0
 
@@ -31,7 +30,7 @@ function placer:update(dt)
             self.y = self.y - (dt * self.fallspeed)
         else
             -- moving left and right
-            self.x = self.x + ((self.direction * (self.speed * 3.75)) * dt)
+            self.x = self.x + ((self.direction * (self.speed * 4.25)) * dt)
             if self.direction < 0 then
                 if self.x < -constants.placerX then
                     self.direction = 1

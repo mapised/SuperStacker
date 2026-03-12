@@ -29,6 +29,7 @@ function world.new(mode, override)
         self.gameover = false
         self.score = 0
         self.mode = gamemodes[mode].new(self)
+        self.messages = {}
 
         return self
     end
@@ -44,18 +45,47 @@ end
 
 function world:createcone(color)
     local texture = resources.textures[color] or resources.textures.trafficcone
-    local cone = g3d.newModel(resources.models.cone, texture, {0, 0, 0}, {math.pi/2, 0, 0})
+    local model = color == "redcone" and resources.models.redcone or resources.models.cone
+
+    local cone = g3d.newModel(model, texture, {0, 0, 0}, {math.pi/2, 0, 0})
 
     return cone
 end
 
-function world:dropcone()
+function world:playconesound()
+    resources.sounds.conedrop:setPitch(1 + ((math.random() - 0.5) * 0.2))
+
+    love.audio.stop(resources.sounds.conedrop)
+    love.audio.play(resources.sounds.conedrop)
+end
+
+function world:input()
     if not self.gameover then
-        self.mode:dropcone()
+        self.mode:input()
+    end
+end
+
+function world:drawmessages()
+    for i, message in pairs(self.messages) do
+        message.time = message.time - (love.timer.getDelta())
+
+        if message.time <= 0 then
+            self.messages[i] = nil
+        else
+            local r, g, b = 0, 0, 0
+            if message.red then
+                r, g, b = 1, 0, 0
+            elseif message.gold then
+                r, g, b = 0.827, 0.69, 0.21
+            end
+            gui:drawtext(message.text, 0, 80 + (message.time * 50), resources.fonts.regular40px, "center", "top", {r, g, b, message.time})
+        end
     end
 end
 
 function world:draw()
+    self:drawmessages()
+
     if not self.mode.custombehavior then
         self.stack:draw()
         self.placer:draw()
