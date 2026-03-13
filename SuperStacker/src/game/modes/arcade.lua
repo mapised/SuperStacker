@@ -1,11 +1,9 @@
-local constants = require("src.constants")
 local resources = require("src.resources")
 local classic = require("src.game.modes.classic")
 
 local arcade = setmetatable({}, {__index = classic})
 arcade.custombehavior = false
 arcade.__index = arcade
-
 
 function arcade.new(world)
     local self = setmetatable(classic.new(world), arcade)
@@ -15,9 +13,27 @@ function arcade.new(world)
     return self
 end
 
-function classic:increasespeed()
-    -- increase speed a little bit
+function arcade:increasespeed()
     self.world.placer.speed = math.min(self.world.placer.speed + 0.025, 1.5)
+end
+
+function arcade:getrandomconecolor()
+    local conecolor = "trafficcone"
+    local random = math.random() * 100
+    
+    if random > 23 and random < 46 then
+        conecolor = "yellowcone"
+    elseif random < 69 then
+        conecolor = "orangecone"
+    elseif random < 92 then
+        conecolor = "bluecone"
+    elseif random < 96 then
+        conecolor = "goldcone"
+    else
+        conecolor = "redcone"
+    end
+
+    return conecolor
 end
 
 function arcade:addcone()
@@ -41,15 +57,16 @@ function arcade:addcone()
     end
 
     if self.conecolor == "goldcone" then
+        deltascore = deltascore * 10
         message.gold = true
     end
 
     table.insert(self.world.messages, message)
 
     self.conecolor = self:getrandomconecolor()
+    self.world.score = self.world.score + deltascore
     self.world.stack:addcone(self.world.placer.cone)
     self.world.placer:setcone(self.world:createcone(self.conecolor))
-    self.world.score = self.world.score + deltascore
     self.world.placer.x = 0
 end
 
@@ -70,8 +87,13 @@ function arcade:input()
                 self.conecolor = self:getrandomconecolor()
                 self.world.placer:setcone(self.world:createcone())
 
+                -- remove 5 cones from the stack and remove 250 score
                 for i = 1, 5 do 
                     self.world.stack:removecone()
+                end
+
+                if self.world.score >= 250 then
+                    self.world.score = self.world.score - 250
                 end
             else
                 -- place cone
@@ -86,6 +108,7 @@ function arcade:input()
         else
             if self.conecolor == "redcone" then
                 love.audio.play(resources.sounds.conefall)
+
                 self.conecolor = self:getrandomconecolor()
                 self.world.placer:setcone(self.world:createcone(self.conecolor))
             else
@@ -94,25 +117,5 @@ function arcade:input()
         end
     end
 end
-
-function arcade:getrandomconecolor()
-    local conecolor = "trafficcone"
-    local random = math.random() * 100
-    
-    if random > 23 and random < 46 then
-        conecolor = "yellowcone"
-    elseif random < 69 then
-        conecolor = "orangecone"
-    elseif random < 92 then
-        conecolor = "bluecone"
-    elseif random < 96 then
-        conecolor = "goldcone"
-    else
-        conecolor = "redcone"
-    end
-
-    return conecolor
-end
-
 
 return arcade

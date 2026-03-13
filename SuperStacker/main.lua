@@ -33,7 +33,6 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
-    print(gui.textSize)
     scenes:call("update", dt)
 end
 

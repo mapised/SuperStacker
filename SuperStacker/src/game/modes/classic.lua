@@ -28,6 +28,14 @@ function classic:increasespeed()
     end
 end
 
+function classic:lose()
+    -- cone drop!
+    love.audio.play(resources.sounds.conefall)
+
+    self.world.placer.falling = true
+    self.x, self.y, self.z = unpack(g3d.camera.position)
+end
+
 function classic:addcone()
     self.world.score = self.world.score + 1
     self.world.stack:addcone(self.world.placer.cone)
@@ -48,14 +56,6 @@ function classic:input()
             self.world:lose()
         end
     end
-end
-
-function classic:lose()
-    -- cone drop!
-    love.audio.play(resources.sounds.conefall)
-
-    self.world.placer.falling = true
-    self.x, self.y, self.z = unpack(g3d.camera.position)
 end
 
 function classic:update(dt)

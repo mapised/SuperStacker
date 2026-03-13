@@ -23,6 +23,10 @@ function placer:setcone(cone)
     self.cone = cone
 end
 
+function placer:getaccuracy()
+    return (1 - (math.abs(self.x) / constants.placerX)) * 100
+end
+
 function placer:update(dt)
     if self.cone then
         if self.falling then
@@ -48,10 +52,6 @@ function placer:update(dt)
         -- move cone=
         self.cone:setTranslation(self.x, 0, self.y)
     end
-end
-
-function placer:getaccuracy()
-    return (1 - (math.abs(self.x) / constants.placerX)) * 100
 end
 
 function placer:draw()

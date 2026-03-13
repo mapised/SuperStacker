@@ -1,6 +1,7 @@
 local g3d = require("g3d")
 local gui = require("src.gui")
 local resources = require("src.resources")
+local keybinds = require("src.keybinds")
 local stack = require("src.game.stack")
 local placer = require("src.game.placer")
 
@@ -13,7 +14,7 @@ local gamemodes = {
 local world = {}
 world.__index = world
 
-function world.new(mode, override)
+function world.new(mode, id, players)
     if gamemodes[mode] then
         local self = {}
         setmetatable(self, world)
@@ -22,10 +23,11 @@ function world.new(mode, override)
         if not gamemodes[mode].custombehavior then
             self.stack = stack.new(self)
             self.placer = placer.new(self)
-
             self.stack:addcone()
         end
-        
+
+        self.id = id or 1
+        self.players = players or 1
         self.gameover = false
         self.score = 0
         self.mode = gamemodes[mode].new(self)
@@ -48,6 +50,7 @@ function world:createcone(color)
     local model = color == "redcone" and resources.models.redcone or resources.models.cone
 
     local cone = g3d.newModel(model, texture, {0, 0, 0}, {math.pi/2, 0, 0})
+    cone:compress()
 
     return cone
 end
@@ -62,6 +65,22 @@ end
 function world:input()
     if not self.gameover then
         self.mode:input()
+    end
+end
+
+function world:drawkeybinds()
+    if keybinds[self.players] then
+        local key = keybinds[self.players][self.id][1]
+        if key then
+            local sprite = resources.sprites.keys[key]
+            if sprite then
+                local y = 30
+                if love.keyboard.isDown(key) then
+                    y = y - 4
+                end
+                gui:drawsprite(sprite, 0, y, 3, 3, "center", "bottom")
+            end
+        end
     end
 end
 
@@ -84,17 +103,19 @@ function world:drawmessages()
 end
 
 function world:draw()
-    self:drawmessages()
-
     if not self.mode.custombehavior then
         self.stack:draw()
         self.placer:draw()
         self.mode:draw()
     end
 
+    self:drawmessages()
+
     if self.gameover then -- draw game over screen
         gui:drawtext("Game Over!", 0, 0, resources.fonts.regular40px, "center", "center")
         gui:drawtext("Score " .. self.score, 0, 30, resources.fonts.regular20px, "center", "center")
+    else
+        self:drawkeybinds()
     end
 end
 

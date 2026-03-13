@@ -1,7 +1,5 @@
-local gui = require("src.gui")
-local world = require("src.game.world")
 local keybinds = require("src.keybinds")
-local resources = require("src.resources")
+local world = require("src.game.world")
 
 local game = {
     resettimer = 3;
@@ -28,7 +26,7 @@ function game:enter(oldScene, mode, players)
         for i = 1, players do
             local x, y, w, h = getdimensions(i, players, sw, sh)
             self.canvases[i] = love.graphics.newCanvas(w, h)
-            self.worlds[i] = world.new(mode)
+            self.worlds[i] = world.new(mode, i, players)
         end
     else
         self.worlds[1] = world.new(mode)
@@ -59,22 +57,6 @@ function game:update(dt)
     end
 end
 
-function game:drawkeybinds(world, i)
-    if keybinds[#self.worlds] then
-        local key = keybinds[#self.worlds][i][1]
-        if key then
-            local sprite = resources.sprites.keys[key]
-            if sprite then
-                local y = 30
-                if love.keyboard.isDown(key) then
-                    y = y - 4
-                end
-                gui:drawsprite(sprite, 0, y, 3, 3, "center", "bottom")
-            end
-        end
-    end
-end
-
 function game:drawduels()
     -- SPLITSCREEN
     local sw, sh = love.graphics.getDimensions()
@@ -90,10 +72,6 @@ function game:drawduels()
             love.graphics.clear()
             love.resize(w, h)
             world:draw()
-        
-        if not world.gameover then
-            self:drawkeybinds(world, i)
-        end
         
         love.graphics.setCanvas()
         love.graphics.draw(canvas, x, y)
