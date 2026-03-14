@@ -1,6 +1,7 @@
 local g3d = require("lib.g3d")
 local timer = require("lib.timer")
 local gui = require("src.gui")
+local constants = require("src.constants")
 local scenes = require("src.scenes")
 require("debugger")
 
@@ -10,7 +11,7 @@ end
 
 -- love callbacks
 function love.load()
-    love.graphics.setBackgroundColor(0.78, 0.78, 0.78)
+    love.graphics.setBackgroundColor(unpack(constants.backgroundcolor))
     love.math.setRandomSeed(os.time())
     love.resize(love.graphics.getDimensions())
 
