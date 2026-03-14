@@ -3,7 +3,7 @@ local button = require("src.gui.button")
 local gui = {
     textSize = 1;
     uiSize = 1;
-    element = {};
+    elements = {};
 }
 
 function gui:setscale(scale)
@@ -20,25 +20,35 @@ function gui:getdimensions()
     return sw, sh
 end
 
-function gui:drawtext(text, x, y, font, xallignment, yallignment, color)
-    love.graphics.setFont(font)
+function gui:alligncoords(x, y, w, h, xallignment, yallignment)
+    local sw, sh = self:getdimensions() 
+    local ox, oy = 0, 0
 
-    local sw, sh = self:getdimensions()
-    local fh = font:getHeight(text)
-    local oy = 0
-
-    -- ALLIGN POSITIONS
+        -- ALLIGN POSITIONS
     if yallignment == "center" then
-        oy = fh / 2
+        oy = h / 2
         y = sh / 2 + y
     elseif yallignment == "bottom" then
-        oy = fh
+        oy = h
         y = sh - y
     end
 
-    if xallignment == "right" then
-        x = -x
+    if xallignment == "center" then
+        ox = w / 2
+        x = sw / 2 + x
+    elseif xallignment == "right" then
+        ox = w
+        x = sw - x
     end
+
+    return x, y, ox, oy
+end
+
+function gui:drawtext(text, x, y, font, xallignment, yallignment, color)
+    love.graphics.setFont(font)
+
+    local fw, fh = font:getWidth(text), font:getHeight(text)
+    local allignedx, allignedy, ox, oy = self:alligncoords(x, y, fw, fh, xallignment, yallignment)
 
     if color then
         love.graphics.setColor(unpack(color))
@@ -46,61 +56,42 @@ function gui:drawtext(text, x, y, font, xallignment, yallignment, color)
         love.graphics.setColor(0, 0, 0, 1)
     end
 
-    love.graphics.printf(text, x, y, sw / self.textSize, xallignment, 0, self.textSize, self.textSize, 0, oy)
+    love.graphics.print(text, allignedx, allignedy, 0, self.textSize, self.textSize, ox, oy)
     love.graphics.setColor(1, 1, 1)
 end
 
 function gui:drawsprite(drawable, x, y, sx, sy, xallignment, yallignment, color)
-    local sw, sh = self:getdimensions()
-    local ox, oy = 0, 0
+    local w, h = drawable:getWidth(), drawable:getHeight()
+    local allignedx, allignedy, ox, oy = self:alligncoords(x,y, w, h, xallignment, yallignment)
 
-    -- ALLIGN POSITIONS
-    if yallignment == "center" then
-        oy = drawable:getHeight() / 2
-        y = sh / 2 + y
-    elseif yallignment == "bottom" then
-        oy = drawable:getHeight()
-        y = sh - y
+    if color then
+        love.graphics.setColor(unpack(color))
+    else
+        love.graphics.setColor(0, 0, 0, 1)
     end
 
-    if xallignment == "center" then
-        ox = drawable:getWidth() / 2
-        x = sw / 2 + x
-    elseif xallignment == "right" then
-        ox = drawable:getWidth()
-        x = sw - x
-    end
-
-    love.graphics.setColor(color and unpack(color) or 0, 0, 0)
-    love.graphics.draw(drawable, x, y, 0, sx * self.uiSize, sy * self.uiSize, ox, oy)
+    love.graphics.draw(drawable, allignedx, allignedy, 0, sx * self.uiSize, sy * self.uiSize, ox, oy)
     love.graphics.setColor(1, 1, 1)
 end
 
-function gui:drawrectangle(mode, x, y, w, h, xallignment, yallignment, color)
-    local sw, sh = self:getdimensions()
+function gui:drawrectangle(mode, x, y, w, h, xallignment, yallignment, color) 
     x, y = x * self.uiSize, y * self.uiSize
     w, h = w * self.uiSize, h * self.uiSize
+    local allignedx, allignedy, ox, oy = self:alligncoords(x, y, w, h, xallignment, yallignment)
 
-        -- ALLIGN POSITIONS
-    if yallignment == "center" then
-        y = sh / 2 + y + (h / 2)
-    elseif yallignment == "bottom" then
-        y = sh - y + h
+    if color then
+        love.graphics.setColor(unpack(color))
+    else
+        love.graphics.setColor(0, 0, 0, 1)
     end
 
-    if xallignment == "center" then
-        x = sw / 2 + x + (w / 2)
-    elseif xallignment == "right" then
-        x = sw - x + w
-    end
-
-    love.graphics.setColor(color and unpack(color) or 0, 0, 0)
-    love.graphics.rectangle(mode, x, y, w, h)
+    love.graphics.rectangle(mode, allignedx - ox, allignedy - oy, w, h)
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function gui:createbutton(x, y, w, h, xallignment, yallignment)
-    local element = button.new(x, y, w, h, xallignment, yallignment)
-    table.insert(self.element, element)
+    local element = button.new(self, x, y, w, h)
+    table.insert(self.elements, element)
 
     return element
 end

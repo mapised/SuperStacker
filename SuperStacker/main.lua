@@ -26,6 +26,10 @@ function love.resize(w, h)
 ))
 end
 
+function love.mousepressed()
+    gui:mousepressed()
+end
+
 function love.keypressed(key)
     if key == "escape" then
         scenes:switch("menu")
@@ -36,9 +40,11 @@ end
 
 function love.update(dt)
     timer.update(dt)
+    gui:update(dt)
     scenes:call("update", dt)
 end
 
 function love.draw()
     scenes:call("draw")
+    gui:draw()
 end
