@@ -69,7 +69,7 @@ function game:drawduels()
         local canvas = self.canvases[i]
 
         love.graphics.setCanvas({canvas, depth = true})
-            love.graphics.clear()
+            love.graphics.clear(world.backgroundcolor)
             love.resize(w, h)
             world:draw()
         

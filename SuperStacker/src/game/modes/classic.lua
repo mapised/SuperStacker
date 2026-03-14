@@ -1,4 +1,4 @@
-local g3d = require("g3d")
+local g3d = require("lib.g3d")
 local gui = require("src.gui")
 local resources = require("src.resources")
 

@@ -1,4 +1,5 @@
-local g3d = require("g3d")
+local g3d = require("lib.g3d")
+local timer = require("lib.timer")
 local gui = require("src.gui")
 local scenes = require("src.scenes")
 require("debugger")
@@ -33,6 +34,7 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
+    timer.update(dt)
     scenes:call("update", dt)
 end
 

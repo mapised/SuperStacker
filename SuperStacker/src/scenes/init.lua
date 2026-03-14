@@ -1,3 +1,5 @@
+local timer = require("lib.timer")
+
 local scenes = {
     scenes = {
         game = require("src.scenes.game");
@@ -13,6 +15,8 @@ end
 function scenes:switch(newScene, ...)
     local oldScene = tostring(self.scene)
     if oldScene ~= newScene then
+        timer.clear()
+        
         self.scene:exit()
         self.scene = self.scenes[newScene]
         if self.scene then

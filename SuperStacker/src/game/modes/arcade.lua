@@ -14,7 +14,7 @@ function arcade.new(world)
 end
 
 function arcade:increasespeed()
-    self.world.placer.speed = math.min(self.world.placer.speed + 0.025, 1.5)
+    self.world.placer.speed = math.min(self.world.placer.speed + 0.025, 2)
 end
 
 function arcade:getrandomconecolor()
@@ -86,6 +86,7 @@ function arcade:input()
 
                 self.conecolor = self:getrandomconecolor()
                 self.world.placer:setcone(self.world:createcone())
+                self.world:flashcolor({1, 0, 0})
 
                 -- remove 5 cones from the stack and remove 250 score
                 for i = 1, 5 do 
@@ -99,6 +100,7 @@ function arcade:input()
                 -- place cone
                 if self.conecolor == "goldcone" then
                     love.audio.play(resources.sounds.gold)
+                    self.world:flashcolor({1, 0.768, 0})
                 end
 
                 self:addcone()
@@ -111,6 +113,7 @@ function arcade:input()
 
                 self.conecolor = self:getrandomconecolor()
                 self.world.placer:setcone(self.world:createcone(self.conecolor))
+                self.world:flashcolor({0, 1, 0})
             else
                 self.world:lose()
             end

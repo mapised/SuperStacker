@@ -1,9 +1,11 @@
-local g3d = require("g3d")
+local g3d = require("lib.g3d")
+local timer = require("lib.timer")
 local gui = require("src.gui")
 local resources = require("src.resources")
 local keybinds = require("src.keybinds")
 local stack = require("src.game.stack")
 local placer = require("src.game.placer")
+local constants = require("src.constants")
 
 local gamemodes = {
     static = require("src.game.modes.static");
@@ -28,10 +30,11 @@ function world.new(mode, id, players)
 
         self.id = id or 1
         self.players = players or 1
-        self.gameover = false
         self.score = 0
-        self.mode = gamemodes[mode].new(self)
+        self.backgroundcolor = constants.backgroundcolor
         self.messages = {}
+        self.gameover = false
+        self.mode = gamemodes[mode].new(self)
 
         return self
     end
@@ -43,6 +46,14 @@ function world:lose()
     if self.mode.lose then
         self.mode:lose()
     end
+end
+
+function world:flashcolor(color)
+    self.backgroundcolor = color
+    
+    timer.tween(0.5, {
+        [self.backgroundcolor] = constants.backgroundcolor
+    })
 end
 
 function world:createcone(color)
