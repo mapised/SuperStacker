@@ -5,13 +5,16 @@ local menu = {}
 function menu:enter(oldScene, score)
     self.background = world.new("static")
 
-    local playbutton = gui:createbutton(0, -90, 220, 70, "center", "center")
+    local playbutton = gui:createbutton(0, -45, 220, 70, "center", "center")
     playbutton.text = "Play!"
+    playbutton.onclick = function()
+        require("src.scenes"):switch("game", "arcade", 3)
+    end
 
-    local leaderboardbutton = gui:createbutton(0, 0, 220, 70, "center", "center")
+    local leaderboardbutton = gui:createbutton(0, 45, 220, 70, "center", "center")
     leaderboardbutton.text = "Leaderboard"
 
-    local optionsbutton = gui:createbutton(0, 90, 220, 70, "center", "center")
+    local optionsbutton = gui:createbutton(0, 135, 220, 70, "center", "center")
     optionsbutton.text = "Options"
 end
 
@@ -24,9 +27,6 @@ function menu:draw()
 end
 
 function menu:keypressed(key)
-    if key == "return" then
-        require("src.scenes"):switch("game", "arcade", 3)
-    end
 end
 
 function menu:exit()

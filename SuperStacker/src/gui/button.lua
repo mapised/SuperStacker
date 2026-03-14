@@ -56,6 +56,8 @@ function button:update(mx, my)
 end
 
 function button:mousepressed()
+    element.mousepressed(self)
+
     if self.hovered and self.onclick then
         self:onclick()
     end

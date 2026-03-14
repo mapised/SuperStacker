@@ -98,8 +98,8 @@ end
 
 function gui:mousepressed()
     for _, element in pairs(self.elements) do
-        if element.pressed then
-            element:pressed()
+        if element.mousepressed then
+            element:mousepressed()
         end
     end
 end
@@ -119,7 +119,7 @@ function gui:draw()
 end
 
 function gui:clear()
-    
+    self.elements = {}
 end
 
 return gui

@@ -66,7 +66,9 @@ function classic:update(dt)
     else
         -- isometric spinning camera
         self.timer = self.timer + (dt * 0.5)
-        self.height = lerp(self.height, self.world.placer.y, dt * 8)
+        self.height = lerp(self.height, self.world.placer.y, dt * 4)
+
+        print(self.height)
 
         local x, y, z = (math.cos(self.timer) * 4), (math.sin(self.timer) * 4), self.height + 2.5
         local lookX, lookY, lookZ = 0.5, 0.5, self.height + 1
