@@ -34,13 +34,11 @@ end
 
 function element:mousepressed()
     if self.hovered then
-        print("WAHH!")
         self.pressed = true
     end
 end
 
 function element:mousereleased()
-    print("EY")
     self.pressed = false
 end
 

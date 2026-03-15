@@ -61,6 +61,26 @@ function gui:drawtext(text, x, y, font, xallignment, yallignment, color)
     love.graphics.setColor(1, 1, 1)
 end
 
+function gui:drawtextinsiderectangle(text, font, x, y, w, h, xallignment, yallignment, color)
+    love.graphics.setFont(font)
+
+    local bw, bh = w * self.scale, h * self.scale
+    local allignedx, allignedy, ox, oy = self:alligncoords(x, y, bw, bh, xallignment, yallignment)
+
+    local fw, fh = font:getWidth(text), font:getHeight(text)
+    local fx, fy = allignedx - ox + (bw / 2), allignedy - oy + (bh / 2)
+    ox, oy = fw / 2, fh / 2
+
+    if color then
+        love.graphics.setColor(unpack(color))
+    else
+        love.graphics.setColor(0, 0, 0, 1)
+    end
+
+    love.graphics.print(text, fx, fy, 0, self.scale, self.scale, ox, oy)
+    love.graphics.setColor(1, 1, 1)
+end
+
 function gui:drawsprite(drawable, x, y, sx, sy, xallignment, yallignment, color)
     local w, h = drawable:getWidth(), drawable:getHeight()
     local allignedx, allignedy, ox, oy = self:alligncoords(x,y, w, h, xallignment, yallignment)
@@ -99,14 +119,12 @@ end
 function gui:mousepressed()
     for _, element in pairs(self.elements) do
         element:mousepressed()
-        print("hark")
     end
 end
 
 function gui:mousereleased()
     for _, element in pairs(self.elements) do
         element:mousereleased()
-        print("newell")
     end
 end
 

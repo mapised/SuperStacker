@@ -76,19 +76,7 @@ function button:draw()
     self.gui:drawrectangle("line", self.x, self.y, self.w, self.h, "center", "center", pallete.border)
 
     if self.text then
-        local font = style.font
-        love.graphics.setFont(font)
-
-        local bw, bh = self.w * self.gui.scale, self.h * self.gui.scale
-        local allignedx, allignedy, ox, oy = self.gui:alligncoords(self.x, self.y, bw, bh, "center", "center")
-
-        local fw, fh = font:getWidth(self.text), font:getHeight(self.text)
-        local fx, fy = allignedx - ox + (bw / 2), allignedy - oy + (bh / 2)
-        local ox, oy = fw / 2, fh / 2
-
-        love.graphics.setColor(pallete.text)
-        love.graphics.print(self.text, fx, fy, 0, self.gui.scale, self.gui.scale, ox, oy)
-        love.graphics.setColor(1, 1, 1)
+        self.gui:drawtextinsiderectangle(self.text, resources.fonts.regular20px, self.x, self.y, self.w, self.h, "center", "center", pallete.text)
     end
 end
 

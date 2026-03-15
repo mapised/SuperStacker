@@ -105,35 +105,41 @@ function game:updateduels(dt)
             end
         elseif self.duels.timer >= 0.5 then
             if not self.duels.pointawarded then
-                local winners = self.worlds
+                local winners = {}
+
+                for _, world in pairs(self.worlds) do
+                    table.insert(winners, {world.score, world})
+                end
 
                 table.sort(winners, function(world1, world2)
-                    if world1.duelsscore > world2.duelsscore then
+                    if world1[1] > world2[1] then
                         return true
                     end
                     return false
                 end)
 
-                if winners[1] == winners[2] then
+                if winners[1][1] == winners[2][1] then
                     -- tie
                     love.audio.stop(resources.sounds.red)
                     love.audio.play(resources.sounds.red)
                     for _, world in pairs(self.worlds) do
+                        world:flashcolor({1, 0, 0})
                         table.insert(world.messages, {
                             text = "Tie";
                             time = 1;
                         })
-                        world:flashcolor({1, 0, 0})
                     end
                 else
+                    local winner = winners[1][2]
+
                     love.audio.stop(resources.sounds.gold)
                     love.audio.play(resources.sounds.gold)
-                    winners[1].duelsscore = winners[1].duelsscore + 1
-                    table.insert(winners[1].messages, {
+                    winner.duelsscore = winner.duelsscore + 1
+                    winner:flashcolor({0, 1, 0})
+                    table.insert(winner.messages, {
                         text = "+1";
                         time = 1;
                     })
-                    winners[1]:flashcolor({0, 1, 0})
                 end
 
                 self.duels.pointawarded = true
@@ -145,10 +151,13 @@ end
 function game:drawduels()
     -- SPLITSCREEN
     local sw, sh = love.graphics.getDimensions()
+    local dt = math.min(love.timer.getDelta(), 1)
+
+    love.graphics.setLineWidth(2)
 
     for i, world in pairs(self.worlds) do
         -- update world before drawing to prevent weird bugs with the g3d camera
-        world:update(love.timer.getDelta())
+        world:update(dt)
         -- draw the canvas
         local x, y, w, h = getdimensions(i, #self.worlds, sw, sh)
         local canvas = self.canvases[i]

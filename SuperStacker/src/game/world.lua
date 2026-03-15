@@ -72,6 +72,8 @@ function world:reset()
         self.stack:addcone()
 
         self.placer.x = 0
+        self.placer.direction = -1
+        self.placer.speed = 1
         self.placer.falling = false
         self.placer.fallspeed = 0
         self.placer:setcone(nil)
@@ -159,7 +161,20 @@ function world:draw()
         self.mode:draw()
     end
 
-    self:drawmessages()
+    if self.duelsscore then
+        local xallignment, yallignment = "right", "top"
+
+        if self.id / 2 == math.floor(self.id / 2) then
+            xallignment = "left"
+        end
+
+        if self.players > 4 and self.id <= self.players / 2 then
+            yallignment = "bottom"
+        end
+
+        gui:drawrectangle("line", 0, 0, 120, 120, xallignment, yallignment)
+        gui:drawtextinsiderectangle(self.duelsscore, resources.fonts.regular40px, 0, 0, 120, 120, xallignment, yallignment)
+    end
 
     if self.gameover then -- draw game over screen
         gui:drawtext("Game Over!", 0, -60, resources.fonts.regular40px, "center", "center")
@@ -167,6 +182,8 @@ function world:draw()
     else
         self:drawkeybinds()
     end
+
+    self:drawmessages()
 end
 
 function world:update(dt)

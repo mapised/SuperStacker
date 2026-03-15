@@ -43,6 +43,8 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
+    dt = math.min(dt)
+
     timer.update(dt)
     gui:update(dt)
     scenes:call("update", dt)
