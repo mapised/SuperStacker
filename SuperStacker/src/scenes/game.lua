@@ -23,6 +23,8 @@ local function getdimensions(i, players, sw, sh)
 end
 
 function game:enter(oldScene, mode, players)
+    love.mouse.setVisible(false)
+
     local sw, sh = love.graphics.getDimensions()
     if players and players > 1 then
         self.duels = {

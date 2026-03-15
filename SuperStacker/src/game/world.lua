@@ -49,9 +49,11 @@ function world:lose()
 
     if self.players == 1 then
         -- create buttons
+        love.mouse.setVisible(true)
         local playagain = gui:createbutton(0, 115, 220, 65, "center", "center")
         playagain.text = "Play Again"
         playagain.onclick = function()
+            love.mouse.setVisible(false)
             self:reset()
         end
 
@@ -168,7 +170,7 @@ function world:draw()
             xallignment = "left"
         end
 
-        if self.players > 4 and self.id <= self.players / 2 then
+        if self.players >= 4 and self.id <= self.players / 2 then
             yallignment = "bottom"
         end
 

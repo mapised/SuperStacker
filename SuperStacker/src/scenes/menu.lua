@@ -10,6 +10,7 @@ local states = {
 local menu = {}
 
 function menu:enter(oldScene, state)
+    love.mouse.setVisible(true)
     self.background = world.new("static")
 
     if state then

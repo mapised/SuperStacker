@@ -16,6 +16,8 @@ return {
         classic = love.graphics.newImage("assets/sprites/icons/classic.png");
         arcade = love.graphics.newImage("assets/sprites/icons/arcade.png");
         duels = love.graphics.newImage("assets/sprites/icons/duels.png");
+        threeway = love.graphics.newImage("assets/sprites/icons/threeway.png");
+        fourway = love.graphics.newImage("assets/sprites/icons/fourway.png");
         royale = love.graphics.newImage("assets/sprites/icons/royale.png");
         keys = {
             ["'"] = love.graphics.newImage("assets/sprites/keys/keyboard_apostrophe_outline.png");
@@ -56,5 +58,5 @@ return {
         goldcone = "assets/textures/goldcone.png";
         bluecone = "assets/textures/bluecone.png";
         base = "assets/textures/base.png";
-    },
+    }
 }

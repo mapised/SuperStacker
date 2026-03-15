@@ -4,6 +4,7 @@ local resources = require("src.resources")
 local mainmenu = {}
 
 function mainmenu.enter(menu)
+
     local play = gui:createbutton(0, -45, 220, 65, "center", "center")
     play.text = "Play!"
     play.onclick = function()
@@ -15,6 +16,7 @@ function mainmenu.enter(menu)
 
     local options = gui:createbutton(0, 135, 220, 65, "center", "center")
     options.text = "Options"
+    
 end
 
 function mainmenu.draw()
