@@ -18,9 +18,9 @@ function playmenu.enter(menu)
     end
 
     local duels = gui:createbutton(0, 135, 220, 65, "center", "center")
-    duels.text = "Duels"
+    duels.text = "Cone Royale"
     duels.onclick = function()
-        require("src.scenes"):switch("game", "arcade", 2)
+        require("src.scenes"):switch("game", "arcade", 12)
     end
 
     local back = gui:createbutton(0, 225, 220, 65, "center", "center")
@@ -35,7 +35,7 @@ function playmenu.draw()
 
     gui:drawsprite(resources.sprites.classic, -75, -45, 1.5, 1.5, "center", "center", {1, 1, 1})
     gui:drawsprite(resources.sprites.arcade, -75, 45, 1.5, 1.5, "center", "center", {1, 1, 1})
-    gui:drawsprite(resources.sprites.duels, -75, 135, 1.5, 1.5, "center", "center", {1, 1, 1})
+    gui:drawsprite(resources.sprites.royale, -75, 135, 1.5, 1.5, "center", "center", {1, 1, 1})
 end
 
 return playmenu

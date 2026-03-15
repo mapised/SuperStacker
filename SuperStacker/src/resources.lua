@@ -15,6 +15,7 @@ return {
         classic = love.graphics.newImage("assets/sprites/icons/classic.png");
         arcade = love.graphics.newImage("assets/sprites/icons/arcade.png");
         duels = love.graphics.newImage("assets/sprites/icons/duels.png");
+        royale = love.graphics.newImage("assets/sprites/icons/royale.png");
         keys = {
             ["'"] = love.graphics.newImage("assets/sprites/keys/keyboard_apostrophe_outline.png");
             ["return"] = love.graphics.newImage("assets/sprites/keys/keyboard_numpad_enter_outline.png");
