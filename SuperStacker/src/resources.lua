@@ -2,6 +2,7 @@ return {
     sounds = {
         conedrop = love.audio.newSource("assets/sounds/conedrop.ogg", "static");
         conefall = love.audio.newSource("assets/sounds/conefall.ogg", "static");
+        win = love.audio.newSource("assets/sounds/win.ogg", "static");
         gold = love.audio.newSource("assets/sounds/gold.wav", "static");
         red = love.audio.newSource("assets/sounds/red.wav", "static");
     },

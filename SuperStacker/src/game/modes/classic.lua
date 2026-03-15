@@ -19,6 +19,10 @@ function classic.new(world)
     return self
 end
 
+function classic.__tostring()
+    return "classic"
+end
+
 function classic:increasespeed()
     -- increase speed a little bit
     if self.world.placer.speed < 2 then

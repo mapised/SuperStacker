@@ -1,14 +1,12 @@
 local button = require("src.gui.button")
 
 local gui = {
-    textSize = 1;
-    uiSize = 1;
+    scale = 1;
     elements = {};
 }
 
 function gui:setscale(scale)
-    self.textSize = scale
-    self.uiSize = scale
+    self.scale = scale
 end
 
 function gui:getdimensions()
@@ -24,8 +22,8 @@ function gui:alligncoords(x, y, w, h, xallignment, yallignment)
     local sw, sh = self:getdimensions() 
     local ox, oy = 0, 0
 
-    x = x * self.uiSize
-    y = y * self.uiSize
+    x = x * self.scale
+    y = y * self.scale
 
     -- ALLIGN POSITIONS
     if yallignment == "center" then
@@ -59,7 +57,7 @@ function gui:drawtext(text, x, y, font, xallignment, yallignment, color)
         love.graphics.setColor(0, 0, 0, 1)
     end
 
-    love.graphics.print(text, allignedx, allignedy, 0, self.textSize, self.textSize, ox, oy)
+    love.graphics.print(text, allignedx, allignedy, 0, self.scale, self.scale, ox, oy)
     love.graphics.setColor(1, 1, 1)
 end
 
@@ -73,12 +71,12 @@ function gui:drawsprite(drawable, x, y, sx, sy, xallignment, yallignment, color)
         love.graphics.setColor(0, 0, 0, 1)
     end
 
-    love.graphics.draw(drawable, allignedx, allignedy, 0, sx * self.uiSize, sy * self.uiSize, ox, oy)
+    love.graphics.draw(drawable, allignedx, allignedy, 0, sx * self.scale, sy * self.scale, ox, oy)
     love.graphics.setColor(1, 1, 1)
 end
 
 function gui:drawrectangle(mode, x, y, w, h, xallignment, yallignment, color) 
-    w, h = w * self.uiSize, h * self.uiSize
+    w, h = w * self.scale, h * self.scale
     local allignedx, allignedy, ox, oy = self:alligncoords(x, y, w, h, xallignment, yallignment)
 
     if color then
@@ -101,12 +99,14 @@ end
 function gui:mousepressed()
     for _, element in pairs(self.elements) do
         element:mousepressed()
+        print("hark")
     end
 end
 
 function gui:mousereleased()
     for _, element in pairs(self.elements) do
         element:mousereleased()
+        print("newell")
     end
 end
 

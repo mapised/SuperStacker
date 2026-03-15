@@ -13,6 +13,10 @@ function arcade.new(world)
     return self
 end
 
+function arcade.__tostring()
+    return "arcade"
+end
+
 function arcade:increasespeed()
     self.world.placer.speed = math.min(self.world.placer.speed + 0.025, 2)
 end

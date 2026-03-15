@@ -46,6 +46,45 @@ function world:lose()
     if self.mode.lose then
         self.mode:lose()
     end
+
+    if self.players == 1 then
+        -- create buttons
+        local playagain = gui:createbutton(0, 115, 220, 65, "center", "center")
+        playagain.text = "Play Again"
+        playagain.onclick = function()
+            self:reset()
+        end
+
+        local menu = gui:createbutton(0, 205, 220, 65, "center", "center")
+        menu.text = "Main Menu"
+        menu.onclick = function()
+            require("src.scenes"):switch("menu")
+        end
+    end
+end
+
+function world:reset()
+    if not self.mode.custombehavior then
+        self.score = 0
+
+        self.stack.length = 0
+        self.stack.cones = {}
+        self.stack:addcone()
+
+        self.placer.x = 0
+        self.placer.falling = false
+        self.placer.fallspeed = 0
+        self.placer:setcone(nil)
+    end
+
+    if self.mode.reset then
+        self.mode:reset()
+    end
+
+    gui:clear()
+    self.gameover = false
+    
+    self.mode.new(self)
 end
 
 function world:flashcolor(color)
@@ -123,8 +162,8 @@ function world:draw()
     self:drawmessages()
 
     if self.gameover then -- draw game over screen
-        gui:drawtext("Game Over!", 0, 0, resources.fonts.regular40px, "center", "center")
-        gui:drawtext("Score " .. self.score, 0, 30, resources.fonts.regular20px, "center", "center")
+        gui:drawtext("Game Over!", 0, -60, resources.fonts.regular40px, "center", "center")
+        gui:drawtext("Score " .. self.score, 0, -10, resources.fonts.regular20px, "center", "center")
     else
         self:drawkeybinds()
     end

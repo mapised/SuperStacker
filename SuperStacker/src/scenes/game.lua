@@ -1,5 +1,6 @@
 local keybinds = require("src.keybinds")
 local world = require("src.game.world")
+local resources = require("src.resources")
 
 local game = {
     resettimer = 3;
@@ -22,11 +23,19 @@ end
 
 function game:enter(oldScene, mode, players)
     local sw, sh = love.graphics.getDimensions()
-    if players then
+    if players and players > 1 then
+        self.duels = {
+            timer = 0;
+            roundcount = 0;
+            message = "";
+            pointawarded = false;
+            victorannounced = false;
+        }
         for i = 1, players do
             local x, y, w, h = getdimensions(i, players, sw, sh)
             self.canvases[i] = love.graphics.newCanvas(w, h)
             self.worlds[i] = world.new(mode, i, players)
+            self.worlds[i].duelsscore = 0
         end
     else
         self.worlds[1] = world.new(mode)
@@ -41,18 +50,91 @@ function game:update(dt)
     -- check win condition / update for singleplayer
     if #self.worlds == 1 then
         self.worlds[1]:update(dt)
-        if self.worlds[1].gameover and self.resettimer <= 0 then
-            require("src.scenes"):switch("menu")
-        end
     else
-        local canreset = true
-        for _, world in pairs(self.worlds) do
-            if not world.gameover then
-                canreset = false
-            end
+        self:updateduels(dt)
+    end
+end
+
+function game:draw()
+    if #self.worlds == 1 then
+        self.worlds[1]:draw()
+    else
+        self:drawduels()
+    end
+end
+
+function game:updateduels(dt)
+    local canreset = true
+    for _, world in pairs(self.worlds) do 
+        if not world.gameover then
+            canreset = false
         end
-        if canreset then
-            require("src.scenes"):switch("menu")
+    end
+
+    self.duels.message = ""
+
+    if canreset then
+        self.duels.timer = self.duels.timer + dt
+        local timer = 5 - math.floor(self.duels.timer)
+
+        if self.duels.timer > 5 then
+            if self.duels.victorannounced then
+                require("src.scenes"):switch("menu")
+            else
+                self.duels.roundcount = self.duels.roundcount + 1
+                self.duels.pointawarded = false
+                self.duels.timer = 0
+
+                for _, world in pairs(self.worlds) do 
+                    world:reset()
+                end
+            end
+        elseif self.duels.timer > 1 then
+            if not self.duels.victorannounced then
+                for _, world in pairs(self.worlds) do
+                    if world.duelsscore >= 5 then
+                        love.audio.play(resources.sounds.win)
+                        self.duels.victorannounced = true
+                        return
+                    end
+                end
+                self.message = "Next Round in " .. timer
+            else
+                self.message = "Exiting in " .. timer
+            end
+        elseif self.duels.timer >= 0.5 then
+            if not self.duels.pointawarded then
+                local winners = self.worlds
+
+                table.sort(winners, function(world1, world2)
+                    if world1.duelsscore > world2.duelsscore then
+                        return true
+                    end
+                    return false
+                end)
+
+                if winners[1] == winners[2] then
+                    -- tie
+                    love.audio.play(resources.sounds.red)
+                    for _, world in pairs(self.worlds) do
+                        table.insert(world.messages, {
+                            text = "Tie";
+                            time = 1;
+                        })
+                        world:flashcolor({1, 0, 0})
+                    end
+                else
+                    love.audio.play(resources.sounds.gold)
+                    winners[1].duelsscore = winners[1].duelsscore + 1
+                    table.insert(winners[1].messages, {
+                        text = "+1";
+                        time = 1;
+                    })
+                    winners[1]:flashcolor({0, 1, 0})
+                end
+
+                self.duels.pointawarded = true
+            end
         end
     end
 end
@@ -100,13 +182,6 @@ function game:drawduels()
     love.graphics.setCanvas()
 end
 
-function game:draw()
-    if #self.worlds == 1 then
-        self.worlds[1]:draw()
-    else
-        self:drawduels()
-    end
-end
 
 function game:keypressed(key)
     if keybinds[#self.worlds] then
@@ -125,6 +200,7 @@ function game:exit()
     love.resize(love.graphics.getDimensions())
     self.canvases = {}
     self.worlds = {}
+    self.duels = {}
 end
 
 return game

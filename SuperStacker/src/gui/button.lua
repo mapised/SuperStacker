@@ -45,13 +45,13 @@ function button:update(mx, my)
     element.update(self, mx, my)
 
     if self.hovered then
-        self.state = "hover"
-    else
         if self.pressed then
             self.state = "pressed"
         else
-            self.state = "normal"
+            self.state = "hover"
         end
+    else
+        self.state = "normal"
     end
 end
 
@@ -72,14 +72,14 @@ function button:draw()
     local pallete = style[self.state]
 
     self.gui:drawrectangle("fill", self.x, self.y, self.w, self.h, "center", "center", pallete.background)
-    love.graphics.setLineWidth(math.ceil(style.borderwidth * self.gui.uiSize))
+    love.graphics.setLineWidth(math.ceil(style.borderwidth * self.gui.scale))
     self.gui:drawrectangle("line", self.x, self.y, self.w, self.h, "center", "center", pallete.border)
 
     if self.text then
         local font = style.font
         love.graphics.setFont(font)
 
-        local bw, bh = self.w * self.gui.uiSize, self.h * self.gui.uiSize
+        local bw, bh = self.w * self.gui.scale, self.h * self.gui.scale
         local allignedx, allignedy, ox, oy = self.gui:alligncoords(self.x, self.y, bw, bh, "center", "center")
 
         local fw, fh = font:getWidth(self.text), font:getHeight(self.text)
@@ -87,7 +87,7 @@ function button:draw()
         local ox, oy = fw / 2, fh / 2
 
         love.graphics.setColor(pallete.text)
-        love.graphics.print(self.text, fx, fy, 0, self.gui.uiSize, self.gui.uiSize, ox, oy)
+        love.graphics.print(self.text, fx, fy, 0, self.gui.scale, self.gui.scale, ox, oy)
         love.graphics.setColor(1, 1, 1)
     end
 end

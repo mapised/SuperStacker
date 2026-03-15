@@ -20,7 +20,7 @@ function playmenu.enter(menu)
     local duels = gui:createbutton(0, 135, 220, 65, "center", "center")
     duels.text = "Cone Royale"
     duels.onclick = function()
-        require("src.scenes"):switch("game", "arcade", 12)
+        require("src.scenes"):switch("game", "arcade", 2)
     end
 
     local back = gui:createbutton(0, 225, 220, 65, "center", "center")

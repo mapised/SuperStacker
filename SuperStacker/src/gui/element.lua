@@ -16,7 +16,7 @@ function element.new(gui, x, y, w, h)
 end
 
 function element:contains(mx, my)
-    local w, h = self.w * self.gui.uiSize, self.h * self.gui.uiSize
+    local w, h = self.w * self.gui.scale, self.h * self.gui.scale
     local allignedx, allignedy, ox, oy = self.gui:alligncoords(self.x, self.y, w, h, "center", "center")
 
     if mx > allignedx - ox and mx < allignedx - ox + w then
@@ -34,12 +34,13 @@ end
 
 function element:mousepressed()
     if self.hovered then
+        print("WAHH!")
         self.pressed = true
     end
 end
 
 function element:mousereleased()
-    print(self.pressed)
+    print("EY")
     self.pressed = false
 end
 
