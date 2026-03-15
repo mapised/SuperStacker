@@ -34,6 +34,7 @@ end
 
 function classic:lose()
     -- cone drop!
+    love.audio.stop(resources.sounds.conefall)
     love.audio.play(resources.sounds.conefall)
 
     self.world.placer.falling = true

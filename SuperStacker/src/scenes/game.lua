@@ -1,3 +1,4 @@
+local gui = require("src.gui")
 local keybinds = require("src.keybinds")
 local world = require("src.game.world")
 local resources = require("src.resources")
@@ -71,11 +72,9 @@ function game:updateduels(dt)
         end
     end
 
-    self.duels.message = ""
-
     if canreset then
         self.duels.timer = self.duels.timer + dt
-        local timer = 5 - math.floor(self.duels.timer)
+        local timer = 4 - math.floor(self.duels.timer)
 
         if self.duels.timer > 5 then
             if self.duels.victorannounced then
@@ -89,18 +88,20 @@ function game:updateduels(dt)
                     world:reset()
                 end
             end
+            self.duels.message = ""
         elseif self.duels.timer > 1 then
             if not self.duels.victorannounced then
                 for _, world in pairs(self.worlds) do
                     if world.duelsscore >= 5 then
+                        love.audio.stop(resources.sounds.win)
                         love.audio.play(resources.sounds.win)
                         self.duels.victorannounced = true
                         return
                     end
                 end
-                self.message = "Next Round in " .. timer
+                self.duels.message = "Next Round in " .. timer
             else
-                self.message = "Exiting in " .. timer
+                self.duels.message = "Exiting in " .. timer
             end
         elseif self.duels.timer >= 0.5 then
             if not self.duels.pointawarded then
@@ -115,6 +116,7 @@ function game:updateduels(dt)
 
                 if winners[1] == winners[2] then
                     -- tie
+                    love.audio.stop(resources.sounds.red)
                     love.audio.play(resources.sounds.red)
                     for _, world in pairs(self.worlds) do
                         table.insert(world.messages, {
@@ -124,6 +126,7 @@ function game:updateduels(dt)
                         world:flashcolor({1, 0, 0})
                     end
                 else
+                    love.audio.stop(resources.sounds.gold)
                     love.audio.play(resources.sounds.gold)
                     winners[1].duelsscore = winners[1].duelsscore + 1
                     table.insert(winners[1].messages, {
@@ -177,6 +180,7 @@ function game:drawduels()
             love.graphics.line(x + w, y, x + w, y + h)
         end
     end
+    gui:drawtext(self.duels.message, 10, 10, resources.fonts.regular20px, "left", "bottom")
     love.graphics.setColor(1, 1, 1)
 
     love.graphics.setCanvas()

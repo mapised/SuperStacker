@@ -80,6 +80,7 @@ function arcade:input()
 
         if accuracy >= 50 then
             if self.conecolor == "redcone" then
+                love.audio.stop(resources.sounds.red)
                 love.audio.play(resources.sounds.red)
 
                 table.insert(self.world.messages, {
@@ -103,6 +104,7 @@ function arcade:input()
             else
                 -- place cone
                 if self.conecolor == "goldcone" then
+                    love.audio.stop(resources.sounds.gold)
                     love.audio.play(resources.sounds.gold)
                     self.world:flashcolor({1, 0.768, 0})
                 end
@@ -113,6 +115,7 @@ function arcade:input()
             end
         else
             if self.conecolor == "redcone" then
+                love.audio.stop(resources.sounds.conefall)
                 love.audio.play(resources.sounds.conefall)
 
                 self.conecolor = self:getrandomconecolor()
