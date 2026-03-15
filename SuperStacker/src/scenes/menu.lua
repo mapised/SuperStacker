@@ -1,21 +1,31 @@
 local world = require("src.game.world")
+local resources = require("src.resources")
 local gui = require("src.gui")
+
+local states = {
+    mainmenu = require("src.menus.mainmenu");
+    playmenu = require("src.menus.playmenu")
+}
+
 local menu = {}
 
-function menu:enter(oldScene, score)
+function menu:enter(oldScene, state)
     self.background = world.new("static")
 
-    local playbutton = gui:createbutton(0, -45, 220, 70, "center", "center")
-    playbutton.text = "Play!"
-    playbutton.onclick = function()
-        require("src.scenes"):switch("game", "arcade", 3)
+    if state then
+        self:setmenu(state) 
+    else
+        self:setmenu("mainmenu")
     end
+end
 
-    local leaderboardbutton = gui:createbutton(0, 45, 220, 70, "center", "center")
-    leaderboardbutton.text = "Leaderboard"
+function menu:setmenu(state)
+    gui:clear()
 
-    local optionsbutton = gui:createbutton(0, 135, 220, 70, "center", "center")
-    optionsbutton.text = "Options"
+    if states[state] then
+        self.state = states[state]
+        self.state.enter(self)
+    end
 end
 
 function menu:update(dt)
@@ -24,9 +34,17 @@ end
 
 function menu:draw()
     self.background:draw()
+
+    gui:drawtext("A Cone Stacker fangame by Aiden", 10, 45, resources.fonts.regular20px, "left", "bottom")
+    gui:drawtext("Cone Stacker is made by Gavin", 10, 0, resources.fonts.regular20px, "left", "bottom")
+
+    if self.state then
+        self.state:draw()
+    end
 end
 
 function menu:keypressed(key)
+
 end
 
 function menu:exit()

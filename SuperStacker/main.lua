@@ -30,6 +30,10 @@ function love.mousepressed()
     gui:mousepressed()
 end
 
+function love.mousereleased() 
+    gui:mousereleased()
+end
+
 function love.keypressed(key)
     if key == "escape" then
         scenes:switch("menu")
@@ -45,6 +49,6 @@ function love.update(dt)
 end
 
 function love.draw()
-    scenes:call("draw")
     gui:draw()
+    scenes:call("draw")
 end

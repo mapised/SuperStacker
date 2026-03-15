@@ -9,7 +9,7 @@ function stack.new(world)
     local self = {}
     setmetatable(self, stack)
 
-    self.base = g3d.newModel(resources.models.base, resources.textures.base, {0, 0, -2}, {math.pi/2, 0, 0}, {1, 1, 1})
+    self.base = g3d.newModel(resources.models.base, resources.textures.base, {0, 0, -1.95}, {math.pi/2, 0, 0}, {1, 1, 1})
 
     self.world = world
     self.length = 0

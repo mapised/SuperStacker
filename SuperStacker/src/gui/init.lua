@@ -24,7 +24,10 @@ function gui:alligncoords(x, y, w, h, xallignment, yallignment)
     local sw, sh = self:getdimensions() 
     local ox, oy = 0, 0
 
-        -- ALLIGN POSITIONS
+    x = x * self.uiSize
+    y = y * self.uiSize
+
+    -- ALLIGN POSITIONS
     if yallignment == "center" then
         oy = h / 2
         y = sh / 2 + y
@@ -75,7 +78,6 @@ function gui:drawsprite(drawable, x, y, sx, sy, xallignment, yallignment, color)
 end
 
 function gui:drawrectangle(mode, x, y, w, h, xallignment, yallignment, color) 
-    x, y = x * self.uiSize, y * self.uiSize
     w, h = w * self.uiSize, h * self.uiSize
     local allignedx, allignedy, ox, oy = self:alligncoords(x, y, w, h, xallignment, yallignment)
 
@@ -98,9 +100,13 @@ end
 
 function gui:mousepressed()
     for _, element in pairs(self.elements) do
-        if element.mousepressed then
-            element:mousepressed()
-        end
+        element:mousepressed()
+    end
+end
+
+function gui:mousereleased()
+    for _, element in pairs(self.elements) do
+        element:mousereleased()
     end
 end
 

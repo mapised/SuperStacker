@@ -63,6 +63,10 @@ function button:mousepressed()
     end
 end
 
+function button:mousereleased()
+    element.mousereleased(self)
+end
+
 function button:draw()
     local style = styles[self.style]
     local pallete = style[self.state]
@@ -75,9 +79,8 @@ function button:draw()
         local font = style.font
         love.graphics.setFont(font)
 
-        local bx, by = self.x * self.gui.uiSize, self.y * self.gui.uiSize
         local bw, bh = self.w * self.gui.uiSize, self.h * self.gui.uiSize
-        local allignedx, allignedy, ox, oy = self.gui:alligncoords(bx, by, bw, bh, "center", "center")
+        local allignedx, allignedy, ox, oy = self.gui:alligncoords(self.x, self.y, bw, bh, "center", "center")
 
         local fw, fh = font:getWidth(self.text), font:getHeight(self.text)
         local fx, fy = allignedx - ox + (bw / 2), allignedy - oy + (bh / 2)

@@ -32,9 +32,7 @@ function static:update(dt)
 end
 
 function static:draw()
-    gui:drawtext("Super Stacker 3D", 0, -200, resources.fonts.regular60px, "center", "center")
-    gui:drawtext("A Cone Stacker fangame by Aiden", 10, 45, resources.fonts.regular20px, "left", "bottom")
-    gui:drawtext("Cone Stacker is made by Gavin", 10, 0, resources.fonts.regular20px, "left", "bottom")
+    
 end
 
 return static

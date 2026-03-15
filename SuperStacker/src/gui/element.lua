@@ -16,9 +16,8 @@ function element.new(gui, x, y, w, h)
 end
 
 function element:contains(mx, my)
-    local x, y = self.x * self.gui.uiSize, self.y * self.gui.uiSize
     local w, h = self.w * self.gui.uiSize, self.h * self.gui.uiSize
-    local allignedx, allignedy, ox, oy = self.gui:alligncoords(x, y, w, h, "center", "center")
+    local allignedx, allignedy, ox, oy = self.gui:alligncoords(self.x, self.y, w, h, "center", "center")
 
     if mx > allignedx - ox and mx < allignedx - ox + w then
         if my > allignedy - oy and my < allignedy - oy + h then
@@ -40,6 +39,7 @@ function element:mousepressed()
 end
 
 function element:mousereleased()
+    print(self.pressed)
     self.pressed = false
 end
 
