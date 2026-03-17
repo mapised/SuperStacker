@@ -67,8 +67,6 @@ end
 
 function world:reset()
     if not self.mode.custombehavior then
-        self.score = 0
-
         self.stack.length = 0
         self.stack.cones = {}
         self.stack:addcone()

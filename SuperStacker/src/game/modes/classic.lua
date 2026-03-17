@@ -6,6 +6,10 @@ local classic = {}
 classic.custombehavior = false
 classic.__index = classic
 
+function classic.__tostring()
+    return "classic"
+end
+
 function classic.new(world)
     local self = {}
     setmetatable(self, classic)
@@ -19,8 +23,9 @@ function classic.new(world)
     return self
 end
 
-function classic.__tostring()
-    return "classic"
+function classic:reset()
+    self.timer = 0
+    self.height = self.world.placer.y
 end
 
 function classic:increasespeed()

@@ -25,13 +25,13 @@ function playmenu.enter(menu)
     end
 
     local threeway = gui:createbutton(160, -45, 240, 65, "center", "center")
-    threeway.text = "1v1v1"
+    threeway.text = "Truels"
     threeway.onclick = function()
         require("src.scenes"):switch("game", "arcade", 3)
     end
 
     local fourway = gui:createbutton(160, 45, 240, 65, "center", "center")
-    fourway.text = "1v1v1v1"
+    fourway.text = "Fruels"
     fourway.onclick = function()
         require("src.scenes"):switch("game", "arcade", 4)
     end

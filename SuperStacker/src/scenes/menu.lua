@@ -4,7 +4,8 @@ local gui = require("src.gui")
 
 local states = {
     mainmenu = require("src.menus.mainmenu");
-    playmenu = require("src.menus.playmenu")
+    playmenu = require("src.menus.playmenu");
+    options = require("src.menus.options");
 }
 
 local menu = {}

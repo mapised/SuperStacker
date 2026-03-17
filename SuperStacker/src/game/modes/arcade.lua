@@ -5,16 +5,16 @@ local arcade = setmetatable({}, {__index = classic})
 arcade.custombehavior = false
 arcade.__index = arcade
 
+function arcade.__tostring()
+    return "arcade"
+end
+ 
 function arcade.new(world)
     local self = setmetatable(classic.new(world), arcade)
 
     self.conecolor = "trafficcone"
 
     return self
-end
-
-function arcade.__tostring()
-    return "arcade"
 end
 
 function arcade:increasespeed()

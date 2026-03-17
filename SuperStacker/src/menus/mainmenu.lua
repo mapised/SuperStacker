@@ -13,10 +13,16 @@ function mainmenu.enter(menu)
 
     local leaderboard = gui:createbutton(0, 45, 220, 65, "center", "center")
     leaderboard.text = "Leaderboard"
+    leaderboard.onclick = function()
+        --menu:setmenu("leaderboard")
+    end
 
     local options = gui:createbutton(0, 135, 220, 65, "center", "center")
     options.text = "Options"
-    
+    options.onclick = function()
+        menu:setmenu("options")
+    end
+
 end
 
 function mainmenu.draw()
