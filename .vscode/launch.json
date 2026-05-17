@@ -9,7 +9,7 @@
         "command": "C:\\Program Files\\LOVE\\love.exe"
       },
       "args": [
-        "SuperStacker.",
+        ".",
         "debug"
       ],
     },
@@ -21,7 +21,7 @@
         "command": "C:\\Program Files\\LOVE\\love.exe"
       },
       "args": [
-        "SuperStacker.",
+        ".",
       ],
     },
   ]

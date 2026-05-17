@@ -5,12 +5,13 @@ local mainmenu = {}
 
 function mainmenu.enter(menu)
 
-    local play = gui:createbutton(0, -45, 220, 65, "center", "center")
+    local play = gui:createbutton(0, 0, 220, 65, "center", "center")
     play.text = "Play!"
     play.onclick = function()
         menu:setmenu("playmenu")
     end
 
+    --[[
     local leaderboard = gui:createbutton(0, 45, 220, 65, "center", "center")
     leaderboard.text = "Leaderboard"
     leaderboard.onclick = function()
@@ -22,6 +23,7 @@ function mainmenu.enter(menu)
     options.onclick = function()
         menu:setmenu("options")
     end
+    ]]
 
 end
 
